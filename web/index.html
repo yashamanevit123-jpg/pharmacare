@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PharmaCare – Pharmacy Management System</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <nav id="nav">
+    <h1>PharmaCare</h1>
+    <div class="nav-links">
+      <button class="on" onclick="show('Dashboard')">Dashboard</button>
+      <button onclick="show('Inventory')">Inventory</button>
+      <button onclick="show('Billing')">Billing</button>
+      <button onclick="show('Purchases')">Purchases</button>
+      <button onclick="show('Prescriptions')">Prescriptions</button>
+      <button onclick="show('Returns')">Returns</button>
+      <button onclick="show('Reports')">Reports</button>
+    </div>
+    <div class="nav-footer">
+      <div id="user-badge" class="user-badge" onclick="openRoleModal()" title="Click to switch role">
+        <span>Loading...</span>
+        <small>Role</small>
+      </div>
+      <small>pharmacare_db · MySQL 8.0</small>
+    </div>
+  </nav>
+
+  <!-- Main View Area -->
+  <main id="main">
+    <p class="empty" style="padding: 40px 0;">Connecting to PharmaCare API...</p>
+  </main>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status"></div>
+
+  <!-- Role Switcher Modal -->
+  <div id="role-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>Switch Active Demo Role</h3>
+      <p class="sub">Select an authenticated employee role to demonstrate Role-Based Access Control (RBAC):</p>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+        <button class="b alt" onclick="switchRole('admin')">
+          <b>System Administrator</b> (Full Access, User Management, Reports)
+        </button>
+        <button class="b alt" onclick="switchRole('rajesh')">
+          <b>Rajesh Gupta — Pharmacist</b> (Catalog, Prescriptions, Dispensing)
+        </button>
+        <button class="b alt" onclick="switchRole('neha')">
+          <b>Neha Bansal — Cashier</b> (POS Billing, Receipts, Customer Intake)
+        </button>
+        <button class="b alt" onclick="switchRole('vikram')">
+          <b>Vikram Malhotra — Inventory Manager</b> (Procurement, Batches, Restock)
+        </button>
+      </div>
+      <div class="modal-actions">
+        <button class="b alt" onclick="closeRoleModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Medicine Modal -->
+  <div id="add-med-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>Add Medicine to Catalog</h3>
+      <div class="form-group">
+        <label>Medicine Brand Name *</label>
+        <input id="new-med-name" placeholder="e.g. Dolo 650mg">
+      </div>
+      <div class="form-group">
+        <label>Generic / Composition Name</label>
+        <input id="new-med-gen" placeholder="e.g. Paracetamol 650mg">
+      </div>
+      <div class="form-group">
+        <label>Therapeutic Category *</label>
+        <select id="new-med-cat"></select>
+      </div>
+      <div class="form-group">
+        <label>Pharmaceutical Manufacturer *</label>
+        <select id="new-med-man"></select>
+      </div>
+      <div class="bar">
+        <div class="form-group" style="flex: 1;">
+          <label>Dosage Form *</label>
+          <select id="new-med-form">
+            <option>Tablet</option>
+            <option>Syrup</option>
+            <option>Capsule</option>
+            <option>Injection</option>
+            <option>Ointment</option>
+            <option>Drops</option>
+            <option>Inhaler</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Unit Packaging</label>
+          <input id="new-med-pack" value="15 Tablets">
+        </div>
+      </div>
+      <div class="bar">
+        <div class="form-group" style="flex: 1;">
+          <label>Rack Location</label>
+          <input id="new-med-rack" value="R1-A1">
+        </div>
+        <div class="form-group" style="flex: 1;">
+          <label>Reorder Level</label>
+          <input id="new-med-reorder" type="number" value="15">
+        </div>
+      </div>
+      <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+        <input id="new-med-rx" type="checkbox" style="width: auto;">
+        <label for="new-med-rx" style="margin: 0; font-weight: normal;">Doctor Prescription Required (Rx)</label>
+      </div>
+      <div class="modal-actions">
+        <button class="b alt" onclick="closeModal('add-med-modal')">Cancel</button>
+        <button class="b" onclick="submitNewMedicine()">Save Medicine</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Batches Inspection Modal -->
+  <div id="batch-modal" class="modal-overlay">
+    <div class="modal" style="max-width: 640px;">
+      <h3>Medicine Inventory Lots & Batches</h3>
+      <div id="batch-modal-body"></div>
+      <div class="modal-actions">
+        <button class="b alt" onclick="closeModal('batch-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Prescription Regimen Details Modal -->
+  <div id="rx-modal" class="modal-overlay">
+    <div class="modal">
+      <h3>Prescription Regimen Items</h3>
+      <div id="rx-modal-body"></div>
+      <div class="modal-actions">
+        <button class="b alt" onclick="closeModal('rx-modal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Printable Tax Invoice Modal -->
+  <div id="invoice-modal" class="modal-overlay">
+    <div class="modal" style="max-width: 580px;">
+      <div id="invoice-modal-body"></div>
+      <div class="modal-actions no-print">
+        <button class="b alt" onclick="closeModal('invoice-modal')">Close</button>
+        <button class="b" onclick="window.print()">Print Bill</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Application Scripts -->
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

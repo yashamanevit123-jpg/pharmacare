@@ -1,0 +1,532 @@
+/* ============================================================================
+   PharmaCare – Pharmacy Management System
+   Preserved Design Tokens & Stylesheet (style.css)
+   Preserves reference UI typography, color palette, responsive layout & themes.
+   ============================================================================ */
+
+:root {
+  --bg: #f4f6f2;
+  --panel: #fff;
+  --ink: #14261f;
+  --mute: #5d6d66;
+  --line: #dfe5df;
+  --pine: #12372f;
+  --pine-ink: #eaf3ee;
+  --mint: #dcebe3;
+  --red: #b3261e;
+  --redbg: #fbe4e1;
+  --amb: #8a5a00;
+  --ambbg: #fbefd0;
+  --ok: #1d6b45;
+  --okbg: #dcf0e3;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1a16;
+    --panel: #16251f;
+    --ink: #e6efe9;
+    --mute: #9db0a6;
+    --line: #27382f;
+    --pine: #0a1f19;
+    --pine-ink: #e6efe9;
+    --mint: #1f3a2f;
+    --red: #ff8a80;
+    --redbg: #3a1a17;
+    --amb: #f0c060;
+    --ambbg: #3a2d10;
+    --ok: #6fd39c;
+    --okbg: #153524;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f1a16;
+  --panel: #16251f;
+  --ink: #e6efe9;
+  --mute: #9db0a6;
+  --line: #27382f;
+  --pine: #0a1f19;
+  --pine-ink: #e6efe9;
+  --mint: #1f3a2f;
+  --red: #ff8a80;
+  --redbg: #3a1a17;
+  --amb: #f0c060;
+  --ambbg: #3a2d10;
+  --ok: #6fd39c;
+  --okbg: #153524;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.5 "IBM Plex Sans", system-ui, sans-serif;
+  display: flex;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Bricolage Grotesque", "IBM Plex Sans", sans-serif;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* Sidebar Navigation */
+nav {
+  width: 230px;
+  background: var(--pine);
+  color: var(--pine-ink);
+  padding: 22px 14px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+
+nav h1 {
+  font-size: 22px;
+  padding: 0 10px 18px;
+}
+
+.nav-links {
+  flex: 1;
+  overflow-y: auto;
+}
+
+nav button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+
+nav button:hover {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+nav button.on {
+  background: rgba(255, 255, 255, 0.16);
+  opacity: 1;
+  font-weight: 600;
+}
+
+nav .nav-footer {
+  padding: 14px 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+nav small {
+  display: block;
+  opacity: 0.6;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.user-badge {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.user-badge:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.user-badge span {
+  display: block;
+  font-weight: 600;
+  color: #fff;
+}
+
+.user-badge small {
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Main Workspace */
+main {
+  flex: 1;
+  min-width: 0;
+  padding: 28px 32px 48px;
+}
+
+main > h2 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.sub {
+  color: var(--mute);
+  margin: 0 0 22px;
+}
+
+/* Summary Metric Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.stat b {
+  display: block;
+  font: 700 28px "Bricolage Grotesque", sans-serif;
+}
+
+.stat span {
+  color: var(--mute);
+  font-size: 13px;
+}
+
+.stat.bad b {
+  color: var(--red);
+}
+
+.stat.warn b {
+  color: var(--amb);
+}
+
+.stat.ok b {
+  color: var(--ok);
+}
+
+/* Grid Columns & Content Panels */
+.cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 18px;
+}
+
+.box {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 18px;
+  min-width: 0;
+}
+
+.box h3 {
+  font-size: 17px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+th {
+  font-weight: 600;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+td.n, th.n {
+  text-align: right;
+}
+
+tr:hover td {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+/* Chips & Badges */
+.chip {
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ok {
+  background: var(--okbg);
+  color: var(--ok);
+}
+
+.warn {
+  background: var(--ambbg);
+  color: var(--amb);
+}
+
+.bad {
+  background: var(--redbg);
+  color: var(--red);
+}
+
+/* Inputs, Selects & Buttons */
+input, select, textarea, button.b {
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+button.b {
+  background: var(--pine);
+  color: var(--pine-ink);
+  border-color: var(--pine);
+  cursor: pointer;
+  font-weight: 600;
+  transition: opacity 0.15s ease;
+}
+
+button.b:hover {
+  opacity: 0.9;
+}
+
+button.b.alt {
+  background: var(--panel);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+button.b.alt:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+button.b.sm {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ok);
+  outline-offset: 2px;
+}
+
+/* Action Bars */
+.bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.bar input {
+  flex: 1;
+  min-width: 180px;
+}
+
+/* Prescriptions */
+.rx {
+  border-left: 4px solid var(--ok);
+  padding: 4px 0 4px 12px;
+  margin-bottom: 14px;
+}
+
+.rx p {
+  margin: 0;
+  color: var(--mute);
+  font-size: 13px;
+}
+
+.rx ul {
+  margin: 6px 0 0;
+  padding-left: 18px;
+}
+
+/* Toast Notifications */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  background: var(--pine);
+  color: var(--pine-ink);
+  padding: 10px 18px;
+  border-radius: 8px;
+  display: none;
+  z-index: 99;
+  font-weight: 500;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.empty {
+  color: var(--mute);
+  padding: 14px 0;
+  text-align: center;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+.modal {
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal h3 {
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mute);
+  margin-bottom: 4px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* Printable Bill Format */
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  nav, #toast, .no-print, .bar {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  .box {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+  .invoice-receipt {
+    display: block !important;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: monospace;
+  }
+}
+
+/* Responsive Breakdown */
+@media (max-width: 760px) {
+  body {
+    flex-direction: column;
+  }
+  nav {
+    width: 100%;
+    height: auto;
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 12px;
+  }
+  nav h1 {
+    width: 100%;
+    padding: 0 6px 6px;
+  }
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+  }
+  nav button {
+    width: auto;
+    padding: 7px 12px;
+  }
+  nav .nav-footer {
+    display: none;
+  }
+  main {
+    padding: 20px 14px 40px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  main > * {
+    animation: in 0.2s ease-out;
+  }
+  @keyframes in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+}

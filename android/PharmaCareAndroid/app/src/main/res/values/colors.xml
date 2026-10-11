@@ -1,0 +1,9 @@
+<resources>
+    <color name="pine_green">#12372F</color>
+    <color name="mint_accent">#DCEBE3</color>
+    <color name="background_light">#F4F6F2</color>
+    <color name="ink_text">#14261F</color>
+    <color name="status_ok">#1D6B45</color>
+    <color name="status_warn">#8A5A00</color>
+    <color name="status_bad">#B3261E</color>
+</resources>

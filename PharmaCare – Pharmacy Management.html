@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PharmaCare – Pharmacy Management</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f4f6f2;--panel:#fff;--ink:#14261f;--mute:#5d6d66;--line:#dfe5df;--pine:#12372f;--pine-ink:#eaf3ee;--mint:#dcebe3;--red:#b3261e;--redbg:#fbe4e1;--amb:#8a5a00;--ambbg:#fbefd0;--ok:#1d6b45;--okbg:#dcf0e3;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a16;--panel:#16251f;--ink:#e6efe9;--mute:#9db0a6;--line:#27382f;--pine:#0a1f19;--pine-ink:#e6efe9;--mint:#1f3a2f;--red:#ff8a80;--redbg:#3a1a17;--amb:#f0c060;--ambbg:#3a2d10;--ok:#6fd39c;--okbg:#153524}}
+:root[data-theme="dark"]{--bg:#0f1a16;--panel:#16251f;--ink:#e6efe9;--mute:#9db0a6;--line:#27382f;--pine:#0a1f19;--pine-ink:#e6efe9;--mint:#1f3a2f;--red:#ff8a80;--redbg:#3a1a17;--amb:#f0c060;--ambbg:#3a2d10;--ok:#6fd39c;--okbg:#153524}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif;display:flex;min-height:100vh}
+h1,h2,h3{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;margin:0;letter-spacing:-.01em}
+nav{width:220px;background:var(--pine);color:var(--pine-ink);padding:22px 14px;position:sticky;top:0;height:100vh;flex:none}
+nav h1{font-size:22px;padding:0 10px 18px}
+nav button{display:block;width:100%;text-align:left;background:none;border:0;color:inherit;font:inherit;padding:10px;border-radius:8px;cursor:pointer;opacity:.75}
+nav button:hover{opacity:1}nav button.on{background:rgba(255,255,255,.14);opacity:1;font-weight:600}
+nav small{display:block;padding:18px 10px 0;opacity:.6;font-size:12px}
+main{flex:1;min-width:0;padding:28px 32px 48px}
+main>h2{font-size:28px;margin-bottom:4px}.sub{color:var(--mute);margin:0 0 22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.stat b{display:block;font:700 28px "Bricolage Grotesque",sans-serif}.stat span{color:var(--mute);font-size:13px}
+.stat.bad b{color:var(--red)}.stat.warn b{color:var(--amb)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:18px;min-width:0}
+.box h3{font-size:17px;margin-bottom:10px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--mute);font-size:13px}td.n,th.n{text-align:right}
+.chip{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12px;font-weight:600}
+.ok{background:var(--okbg);color:var(--ok)}.warn{background:var(--ambbg);color:var(--amb)}.bad{background:var(--redbg);color:var(--red)}
+input,select,button.b{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+button.b{background:var(--pine);color:var(--pine-ink);border-color:var(--pine);cursor:pointer;font-weight:600}
+button.b.alt{background:var(--panel);color:var(--ink);border-color:var(--line)}
+:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.bar input{flex:1;min-width:180px}
+.rx{border-left:4px solid var(--ok);padding:4px 0 4px 12px;margin-bottom:14px}
+.rx p{margin:0;color:var(--mute);font-size:13px}.rx ul{margin:6px 0 0;padding-left:18px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--pine);color:var(--pine-ink);padding:10px 18px;border-radius:8px;display:none;z-index:9}
+.empty{color:var(--mute);padding:14px 0}
+@media(max-width:760px){body{flex-direction:column}nav{width:100%;height:auto;position:static;display:flex;flex-wrap:wrap;gap:4px;padding:12px}nav h1{width:100%;padding:0 6px 6px}nav button{width:auto;padding:7px 12px}nav small{display:none}main{padding:20px 14px 40px}}
+@media(prefers-reduced-motion:no-preference){main>*{animation:in .25s ease-out}@keyframes in{from{opacity:0}}}
+</style>
+</head>
+<body>
+<nav id="nav"><h1>PharmaCare</h1><small>pharmacydb · course project</small></nav>
+<main id="main"></main>
+<div id="toast" role="status"></div>
+<script>
+const cat=['','Tablet','Syrup','Capsule','Injection','Ointment','Drops'];
+const co=['','Sun Pharma','Cipla',"Dr. Reddy's Lab",'Lupin Ltd','Mankind Pharma'];
+const sup=['','Mumbai Med Distributors','Delhi Pharma Traders','Hyderabad Health Suppliers'];
+const M=[
+['Dolo 650mg',1,1,1,'DL650A',150,1.2,2,'2027-08-15','R1-A1'],['Crocin Advance 500mg',1,2,1,'CR500B',120,1.5,2.5,'2027-05-20','R1-A2'],
+['Azithral 500mg',1,3,2,'AZ500C',45,12,18.5,'2026-11-30','R1-B1'],['Augmentin 625 Duo',1,4,2,'AG625D',60,18,25,'2026-09-10','R1-B2'],
+['Pantocid 40mg',3,1,1,'PAN40E',80,6.5,10,'2027-01-15','R2-A1'],['Telma 40mg',1,4,3,'TEL40F',70,8,12.5,'2027-03-20','R2-A2'],
+['Glycomet 500mg',1,5,3,'GLY500G',90,3,5,'2026-12-25','R2-B1'],['Atorva 10mg',1,1,2,'ATR10H',55,7,11,'2027-02-10','R2-B2'],
+['Calpol Syrup 120mg',2,2,1,'CAL120I',4,35,48,'2025-10-15','R3-A1'],['Benadryl Cough Syrup',2,3,2,'BEN100J',6,85,115,'2025-11-20','R3-A2'],
+['Betadine Ointment 20g',5,5,1,'BET20K',25,45,65,'2026-07-10','R4-A1'],['Moov Pain Relief Ointment',5,4,3,'MOOV30L',30,55,75,'2026-06-18','R4-A2'],
+['Human Mixtard Insulin',4,1,3,'INS100M',8,320,410,'2025-09-30','R5-A1'],['Allegra 120mg',1,2,2,'ALL120N',100,9,14,'2027-04-12','R1-C1'],
+['Digene Syrup 200ml',2,5,1,'DIG200O',15,75,98,'2026-10-05','R3-B1']
+].map((a,i)=>({id:i+1,name:a[0],cat:a[1],co:a[2],sup:a[3],batch:a[4],qty:a[5],buy:a[6],sell:a[7],exp:a[8],rack:a[9]}));
+const C=[['Aarav Sharma','9876543210','Mumbai',32,'Male'],['Priya Patel','9876543211','Ahmedabad',28,'Female'],['Rohit Verma','9876543212','Delhi',45,'Male'],['Anjali Singh','9876543213','Lucknow',35,'Female'],['Vikram Reddy','9876543214','Hyderabad',40,'Male'],['Sneha Iyer','9876543215','Chennai',26,'Female'],['Amit Deshmukh','9876543216','Pune',50,'Male'],['Pooja Mehta','9876543217','Jaipur',29,'Female'],['Suresh Kumar','9876543218','Kolkata',60,'Male'],['Kavita Joshi','9876543219','Nagpur',33,'Female']];
+const E=['','Rajesh Gupta (Pharmacist)','Neha Bansal (Cashier)'];
+const D=[['Dr. Sanjay Agarwal','General Physician','Apollo Hospital, Delhi'],['Dr. Sunita Rao','Cardiologist','Fortis Hospital, Mumbai'],['Dr. Arvind Das','Pulmonologist','AIIMS, Delhi']];
+const RX=[{id:1,c:1,d:1,date:'2026-09-28',items:[[1,'1+0+1','5 Days'],[5,'1+0+0','10 Days']]},{id:2,c:2,d:3,date:'2026-09-29',items:[[10,'10ml x 3','7 Days']]},{id:3,c:3,d:2,date:'2026-09-30',items:[[6,'1+0+1','30 Days']]}];
+const P=[{id:1,s:1,date:'2026-09-01',total:15000,items:[[1,100],[9,20]]},{id:2,s:2,date:'2026-09-15',total:22000,items:[[3,50],[10,30]]}];
+const S=[{id:1,c:1,e:1,date:'2026-09-29',pay:'Cash',items:[[1,6,2],[5,2,10]]},{id:2,c:2,e:2,date:'2026-09-30',pay:'UPI',items:[[10,2,115]]},{id:3,c:5,e:1,date:'2026-09-30',pay:'Card',items:[[13,1,410]]},{id:4,c:3,e:1,date:'2026-09-30',pay:'Cash',items:[[6,3,12.5]]}];
+S.forEach(s=>s.total=s.items.reduce((t,i)=>t+i[1]*i[2],0));
+const med=id=>M.find(m=>m.id==id);
+const inr=n=>'₹'+Number(n).toFixed(2);
+const now=new Date(),soon=new Date(now);soon.setMonth(soon.getMonth()+3);
+const iso=d=>d.toISOString().slice(0,10),TODAY=iso(now),SOON=iso(soon);
+const expSt=m=>m.exp<TODAY?['Expired','bad']:m.exp<SOON?['Expiring soon','warn']:['OK','ok'];
+const low=m=>m.qty<10;
+const chip=([t,c])=>`<span class="chip ${c}">${t}</span>`;
+const tbl=(h,rows,nums=[])=>`<div class="scroll"><table><tr>${h.map((x,i)=>`<th class="${nums.includes(i)?'n':''}">${x}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map((x,i)=>`<td class="${nums.includes(i)?'n':''}">${x}</td>`).join('')}</tr>`).join('')||`<tr><td colspan="${h.length}" class="empty">Nothing to show.</td></tr>`}</table></div>`;
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2600)}
+const $=s=>document.querySelector(s);
+const head=(t,s)=>`<h2>${t}</h2><p class="sub">${s}</p>`;
+
+const V={
+Dashboard(){
+ const td=S.filter(s=>s.date==TODAY),L=M.filter(low),X=M.filter(m=>m.exp<SOON);
+ return head('Dashboard',`Today is ${TODAY}. Live from the pharmacydb tables.`)+`<div class="grid">
+ <div class="stat"><b>${inr(td.reduce((t,s)=>t+s.total,0))}</b><span>Today's sales (${td.length} bills)</span></div>
+ <div class="stat"><b>${M.length}</b><span>Medicines in stock</span></div>
+ <div class="stat bad"><b>${L.length}</b><span>Low stock (under 10)</span></div>
+ <div class="stat warn"><b>${X.length}</b><span>Expired or expiring in 3 months</span></div></div>
+ <div class="cols"><div class="box"><h3>Low stock alert</h3>${tbl(['Medicine','Left','Rack'],L.map(m=>[m.name,`<span class="chip bad">${m.qty}</span>`,m.rack]))}</div>
+ <div class="box"><h3>Expiry alert</h3>${tbl(['Medicine','Expiry','Qty','Status'],X.sort((a,b)=>a.exp<b.exp?-1:1).map(m=>[m.name,m.exp,m.qty,chip(expSt(m))]),[2])}</div></div>`},
+Inventory(){
+ return head('Inventory','Search and filter every medicine on the shelves.')+`<div class="bar"><input id="q" placeholder="Search medicine, company or batch"><select id="cf"><option value="0">All categories</option>${cat.slice(1).map((c,i)=>`<option value="${i+1}">${c}</option>`).join('')}</select><select id="sf"><option value="">All statuses</option><option value="low">Low stock</option><option value="exp">Expired or expiring</option></select></div><div class="box" id="inv"></div>`},
+Billing(){
+ return head('Billing','Create a bill. Completing it reduces stock, like the reduce_stock trigger.')+`<div class="cols"><div class="box"><h3>New sale</h3>
+ <div class="bar"><select id="bc">${C.map((c,i)=>`<option value="${i+1}">${c[0]} (${c[2]})</option>`).join('')}</select><select id="be">${[1,2].map(i=>`<option value="${i}">${E[i]}</option>`).join('')}</select><select id="bp"><option>Cash</option><option>UPI</option><option>Card</option></select></div>
+ <div class="bar"><select id="bm">${M.filter(m=>m.qty>0).map(m=>`<option value="${m.id}">${m.name} – ${inr(m.sell)} (${m.qty} left)</option>`).join('')}</select><input id="bq" type="number" min="1" value="1" style="width:80px"><button class="b" id="add">Add to bill</button></div>
+ <div id="cart"></div></div><div class="box"><h3>Sales history</h3><div id="hist"></div></div></div>`},
+Prescriptions(){
+ return head('Prescriptions','Which doctor prescribed what, and to whom.')+`<div class="cols">${RX.map(r=>`<div class="box"><h3>${C[r.c-1][0]}</h3><div class="rx"><p>${D[r.d-1][0]} · ${D[r.d-1][1]} · ${D[r.d-1][2]}</p><p>Prescribed ${r.date}</p><ul>${r.items.map(i=>`<li><b>${med(i[0]).name}</b> – ${i[1]} for ${i[2]}</li>`).join('')}</ul></div></div>`).join('')}</div>`},
+Purchases(){
+ return head('Purchases','Stock bought from suppliers.')+`<div class="cols">${P.map(p=>`<div class="box"><h3>Order #${p.id} · ${sup[p.s]}</h3><p class="sub" style="margin-bottom:8px">${p.date} · ${inr(p.total)}</p>${tbl(['Medicine','Quantity'],p.items.map(i=>[med(i[0]).name,i[1]]),[1])}</div>`).join('')}</div>`}
+};
+let cart=[],cur='Dashboard';
+function invRender(){
+ const q=$('#q').value.toLowerCase(),c=+$('#cf').value,s=$('#sf').value;
+ const r=M.filter(m=>(!q||[m.name,co[m.co],m.batch].join(' ').toLowerCase().includes(q))&&(!c||m.cat==c)&&(s==''||(s=='low'&&low(m))||(s=='exp'&&m.exp<SOON)));
+ $('#inv').innerHTML=tbl(['Medicine','Category','Company','Supplier','Batch','Rack','Stock','Price','Expiry','Status'],r.map(m=>[m.name,cat[m.cat],co[m.co],sup[m.sup],m.batch,m.rack,low(m)?`<span class="chip bad">${m.qty}</span>`:m.qty,inr(m.sell),m.exp,chip(expSt(m))]),[6,7]);
+}
+function cartRender(){
+ const t=cart.reduce((a,i)=>a+i.q*med(i.id).sell,0);
+ $('#cart').innerHTML=cart.length?tbl(['Medicine','Qty','Price','Amount'],cart.map(i=>[med(i.id).name,i.q,inr(med(i.id).sell),inr(i.q*med(i.id).sell)]),[1,2,3])+`<p style="text-align:right"><b>Total ${inr(t)}</b></p><div class="bar" style="justify-content:flex-end"><button class="b alt" id="clr">Clear bill</button><button class="b" id="done">Complete sale</button></div>`:'<p class="empty">The bill is empty. Add a medicine to start.</p>';
+ if(cart.length){$('#clr').onclick=()=>{cart=[];cartRender()};$('#done').onclick=complete}
+ $('#hist').innerHTML=tbl(['Bill','Customer','Date','Payment','Total'],[...S].reverse().map(s=>[s.id,C[s.c-1][0],s.date,s.pay,inr(s.total)]),[4]);
+}
+function complete(){
+ const s={id:S.length+1,c:+$('#bc').value,e:+$('#be').value,date:TODAY,pay:$('#bp').value,items:cart.map(i=>[i.id,i.q,med(i.id).sell])};
+ s.total=s.items.reduce((t,i)=>t+i[1]*i[2],0);
+ s.items.forEach(i=>med(i[0]).qty-=i[1]);
+ S.push(s);cart=[];toast(`Bill #${s.id} saved – ${inr(s.total)}`);show('Billing');
+}
+function show(n){
+ cur=n;$('#main').innerHTML=V[n]();
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.textContent==n));
+ if(n=='Inventory'){['q','cf','sf'].forEach(i=>$('#'+i).oninput=invRender);invRender()}
+ if(n=='Billing'){cartRender();$('#add').onclick=()=>{
+  const id=+$('#bm').value,q=+$('#bq').value,ex=cart.find(i=>i.id==id),tot=(ex?ex.q:0)+q;
+  if(!(q>0))return toast('Enter a quantity of 1 or more.');
+  if(tot>med(id).qty)return toast(`Only ${med(id).qty} of ${med(id).name} in stock.`);
+  ex?ex.q=tot:cart.push({id,q});cartRender()}}
+}
+Object.keys(V).forEach(n=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>show(n);$('#nav').insertBefore(b,$('#nav small'))});
+show('Dashboard');
+</script>
+</body>
+</html>
